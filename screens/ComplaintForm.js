@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StatusBar, StyleSheet, TouchableOpacity, View, Alert } from 'react-native'
+import { StatusBar, StyleSheet, TouchableOpacity, View, Alert, Image } from 'react-native'
 import { Container, Header, Title, Content, Text, Icon, Card, CardItem, Item, Body, Right, Button, Input, Form, Textarea, Left } from 'native-base'
 import ImagePicker from 'react-native-image-picker'
 
@@ -20,12 +20,17 @@ export default class ComplaintForm extends Component {
 
 
   handleChoosePhoto = () => {
+
     const options = {
-      noData: true,
+      noData: false,
+      maxWidth: 100,
+      maxHeight: 100
     };
     ImagePicker.showImagePicker(options, (response) => {
+        console.log('Response = ', response);
+
       if (response.uri) {
-        this.setState({ photo: 'data:image/jpeg;base64,' + response.data });
+        this.setState({ photo: response.data });
       }
     });
   };
@@ -97,11 +102,14 @@ export default class ComplaintForm extends Component {
 
 
     render() {
+        const {photo} = this.state
+
       return (
+
         <Container>
         <Header androidStatusBarColor="#1362af" style={{ backgroundColor: '#1976D2' }}>
           <Body style = {{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', }}>
-            <Title>CONTACT</Title>
+            <Title>Complaint Form</Title>
           </Body>
         </Header>
           <Content>
@@ -113,7 +121,7 @@ export default class ComplaintForm extends Component {
                 <CardItem>
                     <Item>
                       <Icon active name="ios-checkmark-circle" style={{fontSize: 30, color: '#4CAF50', marginLeft:5, marginRight:10}} />
-                       <Text style = {{flex:1}}>Thanks. We will get in touch with you as soon as possible</Text>
+                       <Text style = {{flex:1}}>Thanks for sharing this incident.</Text>
                     </Item>
                 </CardItem>
                 <CardItem>
@@ -130,11 +138,7 @@ export default class ComplaintForm extends Component {
             </View>
             :
             <View>
-                <CardItem>
-                    <Item>
-                        <Input placeholder='Name' onChangeText={(name) => this.setState({name})} ref={'nameClear'}/>
-                    </Item>
-                </CardItem>
+                
                 <CardItem>
                     <Item>
                         <Input placeholder='Date and Time' onChangeText={(dateTime) => this.setState({dateTime})} ref={'dateTimeClear'}/>
@@ -150,14 +154,18 @@ export default class ComplaintForm extends Component {
                     </Form>
                 <CardItem>
                     <Item>
-
-                    </Item>
+                        <Button onPress={() => this.handleChoosePhoto()}>
+                        <Text>Choose Photo</Text>
+                        </Button>
+                        <Image uri={this.state.photo}/>
+                        
+                    </Item> 
                 </CardItem>
                 <CardItem>
                     <Left>
                     </Left>
                     <Body>
-                        <Button success onPress={() => this.postMsg(this.state.name, this.state.dateTime, this.state.email, this.state.msg, 'nameClear', 'dateTimeClear', 'emailClear', 'msgClear')}>
+                        <Button onPress={() => this.postMsg(this.state.name, this.state.dateTime, this.state.email, this.state.msg, 'nameClear', 'dateTimeClear', 'emailClear', 'msgClear')}>
                         <Text>SUBMIT</Text>
                         </Button>
                     </Body>

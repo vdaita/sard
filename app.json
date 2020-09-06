@@ -21,6 +21,10 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "android": {
+      "package": "com.daita.religiousdiscriminationapp"
+    },
+    "entryPoint": "node_modules/expo/AppEntry.js"
   }
 }
